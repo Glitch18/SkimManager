@@ -9,6 +9,8 @@ import {SkimManager} from "../src/SkimManager.sol";
 /**
  * @notice script to deploy the SkimManager
  * Sets up the roles and contracts
+ *
+ * Usage: forge script script/DeploySkimManager.s.sol --rpc-url mainnet --private-key $PRIVATE_KEY --broadcast
  */
 contract DeploySkimManager is Script {
     // -------- Errors --------

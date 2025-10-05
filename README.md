@@ -12,6 +12,14 @@ the adapter first needs to set this contract as the skim recipient.
 In order to run the unit tests against a forked environment, we need an Alchemy API key.
 Please create a `.env` file with the API key. See `example.env` for reference.
 
+Run the following commands to test:
+
+```
+forge install
+forge build
+forge test -vv
+```
+
 ### Deployment 
 
 A deployment script is provided to deploy the SkimManager, it can be run as follows:
