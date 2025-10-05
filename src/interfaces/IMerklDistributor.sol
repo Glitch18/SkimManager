@@ -11,4 +11,7 @@ interface IMerklDistributor {
         uint256[] calldata amounts,
         bytes32[][] calldata proofs
     ) external;
+
+    /// @dev Whitelist an address to claim rewards from the Merkl URD
+    function toggleOperator(address user, address operator) external;
 }

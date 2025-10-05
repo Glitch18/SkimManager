@@ -8,4 +8,7 @@ interface IAdapter {
 
     /// @dev Parent vault that allocates to this adapter
     function parentVault() external view returns (address);
+
+    /// @dev Set the skim recipient
+    function setSkimRecipient(address newSkimRecipient) external;
 }
