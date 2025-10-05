@@ -16,8 +16,8 @@ contract DeploySkimManager is Script {
 
     // -------- State Variables --------
     Vm.Wallet public deployerWallet;
-    address merklDistributor = 0x6000000000000000000000000000000000000000;
-    address swapper = 0x6000000000000000000000000000000000000000;
+    address merklDistributor = 0x3Ef3D8bA38EBe18DB133cEc108f4D14CE00Dd9Ae;
+    address swapper = 0x732ca7E5b02f3E9Fe8D5CA7B17B1D1ea47A57A1B; // Box swapper on Ethereum
 
     // -------- Modifiers --------
     modifier asDeployer() {
