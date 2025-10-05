@@ -100,14 +100,13 @@ contract SkimManager is AccessControl, ReentrancyGuard {
     /// @param token The address of the token to skim.
     /// @param swapData The data to pass to the swapper.
     /// @param minProceeds The minimum amount of proceeds to send to the parent vault.
-    function skimAdapter(
-        address adapter, 
-        address token,
-        bytes calldata swapData,
-        uint256 minProceeds
-    ) external onlyRole(OPERATOR_ROLE) nonReentrant {
+    function skimAdapter(address adapter, address token, bytes calldata swapData, uint256 minProceeds)
+        external
+        onlyRole(OPERATOR_ROLE)
+        nonReentrant
+    {
         if (adapter == address(0) || token == address(0)) revert InvalidAddress();
-        
+
         // Get Adapter
         IAdapter vaultAdapter = IAdapter(adapter);
 
@@ -133,7 +132,7 @@ contract SkimManager is AccessControl, ReentrancyGuard {
         } else {
             // Set exact allowance for Swapper
             IERC20(token).forceApprove(address(swapper), rewardsIn);
-    
+
             // Sell using Swapper
             uint256 balanceBefore = parentToken.balanceOf(address(this));
             swapper.sell(IERC20(token), parentToken, rewardsIn, swapData);
