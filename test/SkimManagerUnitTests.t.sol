@@ -2,7 +2,6 @@
 pragma solidity 0.8.28;
 
 import {Test, Vm} from "forge-std/Test.sol";
-import {console2} from "forge-std/console2.sol";
 import {SkimManager} from "../src/SkimManager.sol";
 import {DeploySkimManager} from "../script/DeploySkimManager.s.sol";
 import {IAdapter} from "../src/interfaces/IAdapter.sol";
@@ -124,6 +123,43 @@ contract SkimManagerUnitTests is Test {
         skimManager.skimAdapter(address(adapter), address(rewardToken), "", 0);
 
         assertEq(rewardToken.balanceOf(address(adapter)), 0); // Now transferred to the parent vault
+    }
+
+    function test_othersCantClaimRewards() public {
+        address[] memory users = new address[](1);
+        address[] memory tokens = new address[](1);
+        uint256[] memory amounts = new uint256[](1);
+        bytes32[][] memory proofs = new bytes32[][](1);
+
+        assertEq(rewardToken.balanceOf(address(adapter)), 0);
+
+        // The following values from the Merkl API are valid proofs for this particular block we've forked from
+        users[0] = address(adapter);
+        tokens[0] = address(rewardToken);
+        amounts[0] = 142007142514017; // From API
+        proofs[0] = new bytes32[](18); // From API
+        proofs[0][0] = 0xa72df3aa96a81395b95ab391c27346498b3f87319f9ec2a9859495327730ec64;
+        proofs[0][1] = 0x38eb6a02190386151cb199a3a2e327024ccb22099ed1d4e5a98ae333f1c14fc7;
+        proofs[0][2] = 0xc49a75f5557b525a7909e6667b108760febcf461c6d3af37008ab60a44d18177;
+        proofs[0][3] = 0xfa7949e17eeebb26b8dbf861596c57c05b6dd0779b11f3073ee232e9ae848ee5;
+        proofs[0][4] = 0x71537e782bec3b84b8fc544bbb0fe042323a32822d9347a661d0a0a76e28afa0;
+        proofs[0][5] = 0x18d371d0561d3a7949160b6dbbbb6da289d5c16b9d9860b74522774cd3bbe4ec;
+        proofs[0][6] = 0x43c90baa6ddf64ac1b11240c2ba29a40c87ad28a3600f631dbc00f5e6bc1c7bf;
+        proofs[0][7] = 0xbf1e404e19082b82f8b672863899390363c33155458ee60f5e5165833eca84bd;
+        proofs[0][8] = 0xca2ead46e7db09548502d75e38ff21205a06aa123952661e434e283fe03d113b;
+        proofs[0][9] = 0xefee46958ec337575c2588125d898e0143c05e1fb72961896642fefbb22f8a5d;
+        proofs[0][10] = 0x52b3bbca3cdbd38721d054c6f8f268bda1c2b486438ee648c7c738b3c8adbd1c;
+        proofs[0][11] = 0xb37c5a74c32f1f0aea3c3b2938c2df4cf6f4f82153634d6988f076eaeffae885;
+        proofs[0][12] = 0xc915a2e475369e4cf21c7618219fe8663f118a1485e605ce8f44c87065ecd526;
+        proofs[0][13] = 0x604961f8ca32a1eda082cc809a72ca4a19eb782de721d7b2a046137d2a32c7c0;
+        proofs[0][14] = 0x0a9ddfce548462fefd9623c2382057f694ac0d9cf3b08266dc82d40f59d277de;
+        proofs[0][15] = 0xdadf13382f8d1ab69171804261554795d3d2165aa47e097be6d5ef330241f6a9;
+        proofs[0][16] = 0xcbbc9857411ca9b79eb673bddd7ebb54b9f168cb32821f7ad2a033536d8dea78;
+        proofs[0][17] = 0xa3e8b266355aa0689e8036e87509b68fc66598f83bdef9ae4de6a4847fc67f32;
+
+        vm.prank(user.addr);
+        vm.expectRevert();
+        merklDistributor.claim(users, tokens, amounts, proofs);
     }
 
     function test_rewardSameAsParentToken() public {
